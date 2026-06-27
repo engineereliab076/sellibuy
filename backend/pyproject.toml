@@ -6,7 +6,7 @@ authors = ["SelliBuy Engineering Team"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.14,<4.0"
+python = ">=3.13,<4.0"
 fastapi = "^0.118.2"
 uvicorn = { extras = ["standard"], version = "^0.37.0" }
 sqlalchemy = "^2.0.43"

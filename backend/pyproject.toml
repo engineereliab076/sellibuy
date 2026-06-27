@@ -1,0 +1,56 @@
+[tool.poetry]
+name = "sellibuy-backend"
+version = "0.1.0"
+description = "SelliBuy marketplace backend API"
+authors = ["SelliBuy Engineering Team"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.14,<4.0"
+fastapi = "^0.118.2"
+uvicorn = { extras = ["standard"], version = "^0.37.0" }
+sqlalchemy = "^2.0.43"
+asyncpg = "^0.30.0"
+alembic = "^1.16.5"
+pydantic = "^2.11.9"
+pydantic-settings = "^2.11.0"
+redis = "^6.4.0"
+celery = "^5.5.3"
+python-jose = { extras = ["cryptography"], version = "^3.5.0" }
+passlib = { extras = ["bcrypt"], version = "^1.7.4" }
+python-multipart = "^0.0.20"
+aioboto3 = "^15.1.0"
+httpx = "^0.28.1"
+structlog = "^25.4.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.2"
+pytest-asyncio = "^1.2.0"
+ruff = "^0.13.2"
+import-linter = "^2.7"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+]
+ignore = [
+    "B008", # do not perform function calls in default arguments (FastAPI depends on this)
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

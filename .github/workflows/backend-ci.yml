@@ -1,0 +1,51 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  ci:
+    name: Lint, Test & Build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Poetry
+        run: pip install --no-cache-dir poetry==2.4.1
+
+      - name: Configure Poetry
+        run: poetry config virtualenvs.create false
+
+      - name: Install dependencies
+        run: poetry install --only main,dev --no-interaction --no-ansi
+
+      - name: Lint with Ruff
+        run: poetry run ruff check .
+
+      - name: Run tests
+        run: poetry run pytest
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: backend
+          push: false
+          tags: sellibuy-backend:test

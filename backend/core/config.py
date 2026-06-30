@@ -127,7 +127,7 @@ class Settings(BaseSettings):
     EXPO_OFFLINE_STORAGE_WARNING_MB: int = 100
 
     @model_validator(mode="after")
-    def derive_celery_broker_url(self) -> Settings:
+    def derive_celery_broker_url(self) -> "Settings":
         """Fall back to REDIS_URL when CELERY_BROKER_URL is not explicitly set."""
         if not self.CELERY_BROKER_URL:
             self.CELERY_BROKER_URL = str(self.REDIS_URL)

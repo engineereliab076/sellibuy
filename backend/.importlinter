@@ -1,0 +1,21 @@
+[importlinter]
+root_packages =
+    core
+    alembic
+    tests
+
+[importlinter:contract:no-tests-in-production]
+name = Production code must not import tests
+type = forbidden
+source_modules =
+    core
+forbidden_modules =
+    tests
+
+[importlinter:contract:alembic-no-tests]
+name = Alembic must not import tests
+type = forbidden
+source_modules =
+    alembic
+forbidden_modules =
+    tests

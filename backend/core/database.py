@@ -23,9 +23,9 @@ engine = create_async_engine(
     _db_url,
     pool_size=settings.DATABASE_POOL_SIZE,
     max_overflow=5,
-    pool_pre_ping=True, # Discard stale connections before use 
-    echo=False,  
-    future=True,  
+    pool_pre_ping=True, # Discard stale connections before use
+    echo=False,
+    future=True,
 )
 
 async_session_factory = async_sessionmaker(
@@ -37,7 +37,7 @@ async_session_factory = async_sessionmaker(
 )
 
 
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
+async def get_db() -> AsyncGenerator[AsyncSession]:
     """FastAPI dependency that yields a transactional AsyncSession."""
     async with async_session_factory() as session:
         try:

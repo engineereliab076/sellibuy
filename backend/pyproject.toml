@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "SelliBuy marketplace backend API"
 authors = ["SelliBuy Engineering Team"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.13,<4.0"
@@ -35,7 +36,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 100
-target-version = "py314"
+target-version = "py313"
 
 [tool.ruff.lint]
 select = [

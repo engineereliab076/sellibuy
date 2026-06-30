@@ -18,6 +18,6 @@ redis_client: Redis = Redis.from_url(
 )
 
 
-async def get_redis() -> AsyncGenerator[Redis, None]:
+async def get_redis() -> AsyncGenerator[Redis]:
     """FastAPI dependency that yields the shared Redis client."""
     yield redis_client

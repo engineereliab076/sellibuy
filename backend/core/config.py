@@ -4,6 +4,8 @@ Loads all environment variables from .env via Pydantic Settings and exposes
 a single ``settings`` instance for use across the application.
 """
 
+from typing import Any
+
 from pydantic import PostgresDsn, RedisDsn, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -126,12 +128,13 @@ class Settings(BaseSettings):
     EXPO_SYNC_RETRY_BACKOFF_MS: int = 2000
     EXPO_OFFLINE_STORAGE_WARNING_MB: int = 100
 
-    @model_validator(mode="after")
-    def derive_celery_broker_url(self) -> "Settings":
+    @model_validator(mode="before")
+    @classmethod
+    def derive_celery_broker_url(cls, data: Any) -> Any:
         """Fall back to REDIS_URL when CELERY_BROKER_URL is not explicitly set."""
-        if not self.CELERY_BROKER_URL:
-            self.CELERY_BROKER_URL = str(self.REDIS_URL)
-        return self
+        if isinstance(data, dict) and not data.get("CELERY_BROKER_URL"):
+            data["CELERY_BROKER_URL"] = data.get("REDIS_URL", "")
+        return data
 
 
 settings = Settings()

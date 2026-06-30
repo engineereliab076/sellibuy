@@ -5,6 +5,7 @@ translating that into HTTP responses.
 """
 
 from datetime import UTC, datetime, timedelta
+from typing import Any, cast
 
 from jose import jwt
 from passlib.context import CryptContext
@@ -59,12 +60,12 @@ def _build_payload(
 
 def hash_password(password: str) -> str:
     """Return a bcrypt hash of *password*."""
-    return _pwd_context.hash(password)
+    return cast(str, _pwd_context.hash(password))
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Return True if *plain_password* matches *hashed_password*."""
-    return _pwd_context.verify(plain_password, hashed_password)
+    return cast(bool, _pwd_context.verify(plain_password, hashed_password))
 
 
 # ---------------------------------------------------------------------------
@@ -80,7 +81,7 @@ def create_access_token(subject: str, role: str, token_version: int) -> str:
         expiry=_parse_expiry(settings.JWT_ACCESS_EXPIRY),
         role=role,
     )
-    return jwt.encode(payload, settings.JWT_SECRET, algorithm=_ALGORITHM)
+    return cast(str, jwt.encode(payload, settings.JWT_SECRET, algorithm=_ALGORITHM))
 
 
 def create_refresh_token(subject: str, token_version: int) -> str:
@@ -91,15 +92,15 @@ def create_refresh_token(subject: str, token_version: int) -> str:
         token_version=token_version,
         expiry=_parse_expiry(settings.JWT_REFRESH_EXPIRY),
     )
-    return jwt.encode(payload, settings.JWT_REFRESH_SECRET, algorithm=_ALGORITHM)
+    return cast(str, jwt.encode(payload, settings.JWT_REFRESH_SECRET, algorithm=_ALGORITHM))
 
 
 # ---------------------------------------------------------------------------
 # JWT decoding
 # ---------------------------------------------------------------------------
 
-def _decode_token(token: str, secret: str, expected_type: str) -> dict:
-    payload = jwt.decode(token, secret, algorithms=[_ALGORITHM])
+def _decode_token(token: str, secret: str, expected_type: str) -> dict[str, Any]:
+    payload = cast(dict[str, Any], jwt.decode(token, secret, algorithms=[_ALGORITHM]))
     if payload.get("type") != expected_type:
         raise ValueError(f"Invalid token type: expected {expected_type}")
     return payload
